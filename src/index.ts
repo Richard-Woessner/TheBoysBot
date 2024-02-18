@@ -33,7 +33,11 @@ client.on('ready', () => {
     if (FitnessChannelId != '') {
       console.log('FitnessChannelId is not null');
 
-      GetResults(client, FitnessChannelId);
+      try {
+        GetResults(client, FitnessChannelId);
+      } catch (error) {
+        console.error(error);
+      }
     } else {
       console.log('FitnessChannelId is null');
     }
@@ -53,45 +57,63 @@ client.on('messageCreate', async (msg: Message) => {
 
   try {
     if (msg.content === 'ping') {
-      var rand = randomInt(1, 5);
+      try {
+        var rand = randomInt(1, 5);
 
-      console.log('Random number: ' + rand);
+        console.log('Random number: ' + rand);
 
-      let message = '';
+        let message = '';
 
-      if (rand < 4) {
-        message = 'pong';
-      } else {
-        message = 'L';
+        if (rand < 4) {
+          message = 'pong';
+        } else {
+          message = 'L';
+        }
+
+        await msg.reply(message);
+      } catch (error) {
+        console.error(error);
       }
-
-      await msg.reply(message);
     }
     // set the FitnessChannelId, needed for the !getResults command
     else if (msg.content === '!fitness') {
-      FitnessChannelId = msg.channelId;
-      msg.reply(`Set FitnessChannelId to ` + msg.channelId);
+      try {
+        FitnessChannelId = msg.channelId;
+        msg.reply(`Set FitnessChannelId to ` + msg.channelId);
 
-      let channel = client.channels.cache.get(FitnessChannelId) as TextChannel;
-      //delete last message
-      var message = await channel.messages.fetch({ limit: 1 });
-      message.first()?.delete();
+        let channel = client.channels.cache.get(
+          FitnessChannelId
+        ) as TextChannel;
+        //delete last message
+        var message = await channel.messages.fetch({ limit: 1 });
+        message.first()?.delete();
+      } catch (error) {
+        console.error(error);
+      }
     }
     // react to the message with the Imp emoji
     else if (msg.content === Imp?.emoji) {
-      console.log('Imp emoji found!');
-      msg.react(Imp.emoji).catch((e) => console.log(e.message));
+      try {
+        console.log('Imp emoji found!');
+        msg.react(Imp.emoji).catch((e) => console.log(e.message));
+      } catch (error) {
+        console.error(error);
+      }
     }
     // get the results of the last week
     else if (msg.content === '!getResults') {
-      console.log('getResults');
+      try {
+        console.log('getResults');
 
-      if (FitnessChannelId === '') {
-        console.log('FitnessChannelId is null');
-        return;
+        if (FitnessChannelId === '') {
+          console.log('FitnessChannelId is null');
+          return;
+        }
+
+        GetResults(client, FitnessChannelId);
+      } catch (error) {
+        console.error(error);
       }
-
-      GetResults(client, FitnessChannelId);
     }
   } catch (e: any) {
     console.log(e);
