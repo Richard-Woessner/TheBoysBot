@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node ./build/index.js",
+    "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "npx nodemon",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write"
@@ -18,7 +20,8 @@
     "markdown-table": "^3.0.3",
     "markdown-table-ts": "^1.0.3",
     "node-emoji": "^2.1.3",
-    "node-schedule": "^2.1.1"
+    "node-schedule": "^2.1.1",
+    "typescript": "^5.3.3"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
@@ -27,7 +30,6 @@
     "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
-    "tsx": "^4.7.1",
-    "typescript": "^5.3.3"
+    "tsx": "^4.7.1"
   }
 }

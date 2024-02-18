@@ -8,7 +8,7 @@ export const SendMessage = (
   try {
     let channel = client.channels.cache.get(channelId) as TextChannel;
 
-    channel.send('Hello here!');
+    channel.send(message);
   } catch (error) {
     console.error(error);
   }
