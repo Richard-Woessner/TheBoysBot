@@ -6,13 +6,45 @@ import { Align, getMarkdownTable } from 'markdown-table-ts';
 export const GetResults = async (client: Client, FitnessChannelId: string) => {
   let channel = client.channels.cache.get(FitnessChannelId) as TextChannel;
 
-  var messages = await channel.messages.fetch();
-
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
+  var messages: Message[] = [];
+
+  var tempMessages = await channel.messages.fetch({ limit: 100 });
+
+  tempMessages.forEach((message) => {
+    messages.push(message);
+  });
+
+  while (
+    messages[messages.length - 1]?.createdTimestamp! > oneWeekAgo.valueOf() &&
+    messages[messages.length - 1]?.id !== '1206653049490116718'
+  ) {
+    console.log('Fetching more messages');
+    var lastMessageId = messages[messages.length - 1]?.id;
+
+    console.log('Last message id: ' + lastMessageId);
+
+    tempMessages = await channel.messages.fetch({
+      before: lastMessageId,
+      limit: 100
+    });
+
+    tempMessages.forEach((message) => {
+      messages.push(message);
+    });
+
+    console.log(messages.length);
+
+    messages.sort((a, b) => b.createdTimestamp - a.createdTimestamp);
+  }
+
+  console.log('Messages: ' + messages.length);
+
   const pastWeekMessages = messages.filter(
-    (msg: Message) => msg.createdAt > oneWeekAgo && msg.author.bot === false
+    (msg: Message) =>
+      msg.createdTimestamp > oneWeekAgo.valueOf() && msg.author.bot === false
   );
 
   var impRecords: ImpRecord[] = [];

@@ -65,7 +65,7 @@ client.on('messageCreate', async (msg: Message) => {
         message = 'L';
       }
 
-      await msg.react(message);
+      await msg.reply(message);
     }
     // set the FitnessChannelId, needed for the !getResults command
     else if (msg.content === '!fitness') {
