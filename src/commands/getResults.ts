@@ -102,5 +102,5 @@ export const GetResults = async (client: Client, FitnessChannelId: string) => {
 
   console.log(table);
 
-  //channel.send('@here```' + table + '```');
+  channel.send('@here```' + table + '```');
 };
