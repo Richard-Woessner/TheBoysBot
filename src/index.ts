@@ -85,14 +85,18 @@ client.on('messageCreate', async (msg: Message) => {
           FitnessChannelId
         ) as TextChannel;
         //delete last message
-        var message = await channel.messages.fetch({ limit: 1 });
-        message.first()?.delete();
+        var messages = await channel.messages.fetch({ limit: 2 });
+        messages.forEach((message) => {
+          message.delete();
+        });
       } catch (error) {
         console.error(error);
       }
     }
     // react to the message with the Imp emoji
     else if (msg.content === Imp?.emoji) {
+      if (msg.channelId !== FitnessChannelId) return;
+
       try {
         console.log('Imp emoji found!');
         msg.react(Imp.emoji).catch((e) => console.log(e.message));

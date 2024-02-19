@@ -17,25 +17,27 @@ export const GetResults = async (client: Client, FitnessChannelId: string) => {
     messages.push(message);
   });
 
+  var killSwitch = 0;
+
   while (
     messages[messages.length - 1]?.createdTimestamp! > oneWeekAgo.valueOf() &&
-    messages[messages.length - 1]?.id !== '1206653049490116718'
+    killSwitch == 0
   ) {
     console.log('Fetching more messages');
     var lastMessageId = messages[messages.length - 1]?.id;
-
-    console.log('Last message id: ' + lastMessageId);
 
     tempMessages = await channel.messages.fetch({
       before: lastMessageId,
       limit: 100
     });
 
+    if (tempMessages.size === 0) {
+      killSwitch = 1;
+    }
+
     tempMessages.forEach((message) => {
       messages.push(message);
     });
-
-    console.log(messages.length);
 
     messages.sort((a, b) => b.createdTimestamp - a.createdTimestamp);
   }
@@ -98,5 +100,7 @@ export const GetResults = async (client: Client, FitnessChannelId: string) => {
     alignment: [Align.Left, Align.Center, Align.Right]
   });
 
-  channel.send('@here```' + table + '```');
+  console.log(table);
+
+  //channel.send('@here```' + table + '```');
 };
